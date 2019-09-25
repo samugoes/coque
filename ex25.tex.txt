@@ -1,0 +1,186 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[portuguese]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm}
+\usepackage{newunicodechar}
+\usepackage{float}
+\newunicodechar{²}{\ensuremath{{}^2}}
+
+\title{Comparasion of sorting algorithms \LaTeX}
+\author{Samuel de Goes
+    \\
+    Matheus Diôgo}
+
+\begin{document}
+\maketitle
+\section{\huge \bf Comparação entre programas {\it Sort}}
+\subsection{\bf Quick{\it sort}}
+
+\subsubsection{\bf Explicação}
+
+ O Quicksort é o algoritmo mais eficiente na ordenação por comparação. Nele se escolhe um elemento chamado de pivô, a partir disto é organizada a lista para que todos os números anteriores a ele sejam menores que ele, e todos os números posteriores a ele sejam maiores que ele. Ao final desse processo o número pivô já está em sua posição final. Os dois grupos desordenados recursivamente sofreram o mesmo processo até que a lista esteja ordenada.
+
+\subsubsection{\bf Algorítmo em C}
+
+int pivo, aux, i, j, meio;
+
+i = inicio;
+
+j = fim;
+
+meio = (int) ((i + j) / 2);
+
+pivo = vetor[meio];
+
+do
+
+\{
+
+    while (vetor[i] $<$ pivo) i = i + 1;
+
+        while (vetor[j] $>$ pivo) j = j - 1;
+
+
+            if(i <= j)
+
+            \{
+
+                aux = vetor[i];
+
+                vetor[i] = vetor[j];
+
+                vetor[j] = aux;
+
+                i = i + 1;
+
+                j = j - 1;
+
+            \}
+\}while(j $>$ i);
+
+
+if(inicio $<$ j) quicksort(vetor, inicio, j);
+
+if(i $<$ fim) quicksort(vetor, i, fim);
+
+\subsubsection{\bf Vantagens}
+
+{\bf 1.} É extremamente eficiente para ordenar arquivos de dados.\\
+{\bf 2.} Necessita de apenas uma pequena pilha como memória auxiliar.\\
+{\bf 3.} Requer cerca de n log n comparações em média para ordenar n itens.
+
+\subsubsection{\bf Desvantagens}
+
+{\bf 1.} Sua implementação é muito delicada e difícil: Um pequeno engano pode levar a efeitos inesperados para algumas entradas de dados.\\
+{\bf 2.} O método não é estável.
+
+\subsubsection{\bf Complexidade}
+{\bf Comportamento no melhor caso:}
+
+O melhor caso de particionamento acontece quando ele produz duas listas de tamanho não maior que n/2, uma vez que uma lista terá tamanho [n/2] e outra tamanho [n/2] - 1. Nesse caso, o quicksort é executado com maior rapidez.
+
+{\bf Comportamento no pior caso:}
+
+O pior caso de particionamento ocorre quando o elemento pivô divide a lista de forma desbalanceada, ou seja, divide a lista em duas sub listas: uma com tamanho 0 e outra com tamanho n - 1 (no qual n se refere ao tamanho da lista original). Isso pode ocorrer quando o elemento pivô é o maior ou menor elemento da lista, ou seja, quando a lista já está ordenada, ou inversamente ordenada.
+
+Se isso acontece em todas as chamadas do método de particionamento, então cada etapa recursiva chamará listas de tamanho igual à lista anterior - 1.
+
+\subsection{\bf Selection{\it Sort}}
+
+\subsubsection{\bf Explicação}
+
+Este algoritmo é baseado em se passar sempre o menor valor do vetor para a primeira posição (ou o maior dependendo da ordem requerida), depois o segundo menor valor para a segunda posição e assim sucessivamente, até os últimos dois elementos.
+
+Neste algoritmo de ordenação é escolhido um número a partir do primeiro, este número escolhido é comparado com os números a partir da sua direita, quando encontrado um número menor, o número escolhido ocupa a posição do menor número encontrado. Este número encontrado será o próximo número escolhido, caso não for encontrado nenhum número menor que este escolhido, ele é colocado na posição do primeiro número escolhido, e o próximo número à sua direita vai ser o escolhido para fazer as comparações. É repetido esse processo até que a lista esteja ordenada.
+
+\subsubsection{\bf Algorítmo em C}
+
+\#define SORT 100
+
+\#define NUM 10
+
+int vetor[NUM];
+
+int min, aux;
+
+int i;
+
+int j;
+
+srand(time(NULL)+getpid());
+
+
+for(i = 0; i $<$ NUM; i++)
+
+\{
+
+    vetor[i] = rand()\%SORT;
+
+\}
+
+for(i = 0; i $<$ NUM - 1; i++)
+
+\{
+
+    min = i;
+
+    for(j = i+1; j $<$ NUM; j++)
+
+\{
+
+    if(vetor[j] $<$ vetor[min])
+
+min = j;
+
+\}
+
+if(i != min)
+
+\{
+
+    aux = vetor[i];
+
+    vetor[i] = vetor[min];
+
+    vetor[min] = aux;
+
+\}
+
+\}
+
+\subsubsection{\bf Vantagens}
+
+{\bf 1}. Ele é um algoritmo simples de ser implementado em comparação aos demais.\\
+{\bf 2}. Não necessita de um vetor auxiliar (in-place).\\
+{\bf 3}. Por não usar um vetor auxiliar para realizar a ordenação, ele ocupa menos memória.\\
+{\bf 4}. Ele é uns dos mais velozes na ordenação de vetores de tamanhos pequenos.
+
+\subsubsection{\bf Desvantagens}
+
+{\bf 1}. Ele é um dos mais lentos para vetores de tamanhos grandes.\\
+{\bf 2}. Ele não é estável.\\
+{\bf 3}. Ele faz sempre $(n² - n) / 2$  comparações, independente do vetor está ordenado ou não.
+
+\subsubsection{\bf Complexidade}
+
+O selection sort compara a cada interação um elemento com os outros, visando encontrar o menor. Dessa forma, podemos entender que não existe um melhor caso mesmo que o vetor esteja ordenado ou em ordem inversa serão executados os dois laços do algoritmo, o externo e o interno.
+
+\subsection{\bf Tabela Comparativa}
+
+\begin{table}[!htb]
+\begin{tabular}{|c|c|c|}
+\hline
+{\bf Algoritmo}  & \multicolumn{1}{l|}{{\bf Tempo}}   &  {\bf Comparações} \\ \hline
+QuickSort        & 0.002 s                            & 100                \\ \hline
+SelectionSort    & 0.008 s                            & 100                \\ \hline
+{\bf Algoritmo}  & {\bf Tempo}                        &  {\bf Comparações} \\ \hline
+QuickSort        & 0,379 s                            & 10000              \\ \hline
+selectionSort    & \multicolumn{1}{l|}{1.223 s}       & 10000              \\ \hline
+\end{tabular}
+\end{table}
+\newpage
+\subsection{\bf Conclusão}
+
+Desta forma, após estudado os dados apresentados neste trabalho, pode-se concluir que o quick{\it sort} é visivelmente mais rápido e complexo comparado ao selection{\it sort}, sendo recomendado para programadores experientes, para evitar erros em sua delicada e difícil implementação, que necessitam fazer a ordenação de uma lista grande com um menor tempo de execução por terem um curto prazo de entrega. Por outro lado, o selection{\it sort} por ser um ser um algoritmo de fácil entendimento e implementação é recomendado para programadores sem muita experiência e que desejam fazer a ordenação de uma lista com um prazo de entrega consideravelmente grande.
+
+\end{document}
